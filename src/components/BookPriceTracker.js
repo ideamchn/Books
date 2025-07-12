@@ -1,3 +1,11 @@
+import React, { useState } from 'react';
+import BookTable from './BookTable';
+import SaveButton from './SaveButton';
+import TotalDisplay from './TotalDisplay';
+import { booksData } from '../data/books';
+import { formatCurrency } from '../utils/currency';
+import './BookPriceTracker.css';
+
 // Updated handleSave function in BookPriceTracker.js
 const handleSave = async () => {
     setIsSubmitting(true);
@@ -57,3 +65,5 @@ const handleSave = async () => {
         alert('Failed to save prices. Please try again.');
     }
 };
+
+export default BookPriceTracker;
