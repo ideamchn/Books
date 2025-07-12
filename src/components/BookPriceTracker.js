@@ -1,4 +1,3 @@
-// src/components/BookPriceTracker.js
 import React, { useState } from 'react';
 import BookTable from './BookTable';
 import SaveButton from './SaveButton';
@@ -18,6 +17,7 @@ const BookPriceTracker = () => {
     const [isSaved, setIsSaved] = useState(false);
     const [showTotal, setShowTotal] = useState(false);
     const [total, setTotal] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handlePriceChange = (id, value) => {
         const numValue = parseFloat(value);
@@ -31,7 +31,6 @@ const BookPriceTracker = () => {
     };
 
     const handleDeleteBook = (id) => {
-        // Confirm before deleting
         const bookToDelete = books.find(book => book.id === id);
         const confirmDelete = window.confirm(
             `Are you sure you want to delete "${bookToDelete.title}"?`
@@ -40,7 +39,6 @@ const BookPriceTracker = () => {
         if (confirmDelete) {
             setBooks(books.filter(book => book.id !== id));
 
-            // If we've already saved, recalculate the total
             if (isSaved) {
                 const newBooks = books.filter(book => book.id !== id);
                 let newTotal = 0;
@@ -54,19 +52,57 @@ const BookPriceTracker = () => {
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        setIsSubmitting(true);
+
         let calculatedTotal = 0;
+        const priceData = [];
 
         books.forEach(book => {
             const price = parseFloat(book.price) || 0;
             calculatedTotal += price;
+            if (price > 0) {
+                priceData.push({
+                    title: book.title,
+                    author: book.author,
+                    price: price
+                });
+            }
         });
 
         calculatedTotal = Math.round(calculatedTotal * 100) / 100;
 
-        setTotal(calculatedTotal);
-        setShowTotal(true);
-        setIsSaved(true);
+        // Create form data for Netlify
+        const formData = new FormData();
+        formData.append('form-name', 'book-prices');
+        formData.append('submission-date', new Date().toISOString());
+        formData.append('total', calculatedTotal);
+        formData.append('book-count', priceData.length);
+        formData.append('books-data', JSON.stringify(priceData));
+
+        // Submit to Netlify Forms
+        try {
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                setTotal(calculatedTotal);
+                setShowTotal(true);
+                setIsSaved(true);
+                setIsSubmitting(false);
+
+                // Show success message
+                alert('Prices saved successfully! You can view submissions in your Netlify dashboard.');
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setIsSubmitting(false);
+            alert('Failed to save prices. Please try again.');
+        }
     };
 
     return (
@@ -86,7 +122,11 @@ const BookPriceTracker = () => {
                 />
 
                 <div className="action-section">
-                    <SaveButton onClick={handleSave} disabled={isSaved} />
+                    <SaveButton
+                        onClick={handleSave}
+                        disabled={isSaved || isSubmitting}
+                        loading={isSubmitting}
+                    />
                 </div>
 
                 {showTotal && (
@@ -101,6 +141,15 @@ const BookPriceTracker = () => {
                     </div>
                 )}
             </div>
+
+            {/* Hidden form for Netlify Forms detection */}
+            <form name="book-prices" data-netlify="true" hidden>
+                <input type="hidden" name="form-name" value="book-prices" />
+                <input type="hidden" name="submission-date" />
+                <input type="hidden" name="total" />
+                <input type="hidden" name="book-count" />
+                <textarea name="books-data"></textarea>
+            </form>
         </div>
     );
 };

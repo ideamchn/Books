@@ -1,14 +1,14 @@
 import React from 'react';
 import './SaveButton.css';
 
-const SaveButton = ({ onClick, disabled }) => {
+const SaveButton = ({ onClick, disabled, loading }) => {
     return (
         <button
             onClick={onClick}
-            disabled={disabled}
-            className="save-button"
+            disabled={disabled || loading}
+            className={`save-button ${loading ? 'loading' : ''}`}
         >
-            {disabled ? 'Saved' : 'Save'}
+            {loading ? 'Saving...' : disabled ? 'Saved' : 'Save Prices'}
         </button>
     );
 };
