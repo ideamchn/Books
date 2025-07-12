@@ -1,0 +1,57 @@
+.save-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    background: #21808d;
+    color: #fcfcf9;
+    min-width: 120px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.save-button:hover:not(:disabled) {
+    background: #1d7480;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 128, 141, 0.3);
+}
+
+.save-button:active:not(:disabled) {
+    background: #1a6873;
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(33, 128, 141, 0.2);
+}
+
+.save-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.4);
+}
+
+.save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #cccccc;
+}
+
+/* Mobile enhancements */
+@media (max-width: 768px) {
+    .save-button {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+        border-radius: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .save-button {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+}

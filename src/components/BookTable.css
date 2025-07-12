@@ -1,0 +1,171 @@
+/* ===== Updated src/components/BookTable.css ===== */
+.table-container {
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.books-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fffffD;
+    border: 1px solid rgba(94, 82, 64, 0.12);
+    min-width: 700px;
+}
+
+.books-table th {
+    background-color: rgba(94, 82, 64, 0.12);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-bottom: 1px solid rgba(94, 82, 64, 0.2);
+    color: #13343b;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.books-table th.price-column {
+    text-align: right;
+    width: 150px;
+}
+
+.books-table th.author-column {
+    width: 250px;
+}
+
+.books-table th.action-column {
+    text-align: center;
+    width: 100px;
+}
+
+.books-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(94, 82, 64, 0.12);
+    vertical-align: middle;
+}
+
+.books-table tr.even-row {
+    background-color: rgba(94, 82, 64, 0.04);
+}
+
+.books-table tbody tr:hover {
+    background-color: rgba(94, 82, 64, 0.12);
+}
+
+.book-title {
+    font-weight: 500;
+    color: #13343b;
+    line-height: 1.5;
+}
+
+.book-author {
+    color: #626c71;
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+.price-cell {
+    text-align: right;
+    width: 150px;
+}
+
+.action-cell {
+    text-align: center;
+    width: 100px;
+}
+
+/* Mobile card view for smaller screens */
+@media (max-width: 768px) {
+    .table-container {
+        border-radius: 0;
+        margin: 0 -0.5rem 1.5rem;
+        box-shadow: none;
+    }
+
+    .books-table {
+        min-width: 100%;
+        border: none;
+    }
+
+    .books-table thead {
+        display: none;
+    }
+
+    .books-table tbody {
+        display: block;
+    }
+
+    .books-table tr {
+        display: block;
+        margin-bottom: 0.5rem;
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        position: relative;
+    }
+
+    .books-table tr.even-row {
+        background-color: white;
+    }
+
+    .books-table td {
+        display: block;
+        padding: 0;
+        border: none;
+        text-align: left !important;
+    }
+
+    .book-title {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        padding-right: 50px; /* Space for delete button */
+    }
+
+    .book-author {
+        margin-bottom: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .price-cell {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+
+    .price-cell::before {
+        content: 'Price: ₹';
+        font-weight: 500;
+        color: #626c71;
+    }
+
+    .action-cell {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .books-table tr {
+        margin-bottom: 0.75rem;
+        padding: 0.875rem;
+    }
+
+    .book-title {
+        font-size: 0.9375rem;
+    }
+
+    .action-cell {
+        top: 0.875rem;
+        right: 0.875rem;
+    }
+}

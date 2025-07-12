@@ -1,0 +1,66 @@
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ff4444;
+    background-color: #fff;
+    color: #ff4444;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.delete-button:hover {
+    background-color: #ff4444;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+}
+
+.delete-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(255, 68, 68, 0.2);
+}
+
+.delete-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.3);
+}
+
+.delete-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.delete-text {
+    display: inline;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .delete-button {
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .delete-text {
+        display: none;
+    }
+
+    .delete-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .delete-button {
+        padding: 0.375rem;
+    }
+}

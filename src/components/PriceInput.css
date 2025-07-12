@@ -1,0 +1,59 @@
+.price-input {
+    width: 120px;
+    padding: 0.5rem;
+    border: 1px solid rgba(94, 82, 64, 0.2);
+    border-radius: 0.5rem;
+    background-color: #fffffd;
+    color: #13343b;
+    font-size: 0.875rem;
+    text-align: right;
+    transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.price-input:focus {
+    border-color: #21808d;
+    outline: 2px solid #21808d;
+    outline-offset: 2px;
+}
+
+.price-input:disabled {
+    background-color: rgba(94, 82, 64, 0.12);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.price-input::placeholder {
+    color: #626c71;
+    opacity: 0.5;
+}
+
+/* Remove spinner buttons for number inputs */
+.price-input::-webkit-inner-spin-button,
+.price-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.price-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .price-input {
+        width: 100%;
+        max-width: 150px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .price-input {
+        padding: 0.625rem;
+    }
+}
