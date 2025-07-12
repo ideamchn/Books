@@ -52,64 +52,74 @@ const BookPriceTracker = () => {
         }
     };
 
-    const handleSave = async () => {
-        setIsSubmitting(true);
-
-    let calculatedTotal = 0;
-    const priceData = [];
-
-    books.forEach(book => {
-        const price = parseFloat(book.price) || 0;
-        calculatedTotal += price;
-        if (price > 0) {
-            priceData.push({
-                title: book.title,
-                author: book.author,
-                price: price
-            });
-        }
-    });
-
-    calculatedTotal = Math.round(calculatedTotal * 100) / 100;
-
-    // Create URL-encoded form data for Netlify
+    // Helper function to encode data for form submission
     const encode = (data) => {
         return Object.keys(data)
             .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
             .join("&");
     };
 
-    // Submit to Netlify Forms
-    try {
-        const response = await fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: encode({
-                "form-name": "book-prices",
-                "submission-date": new Date().toISOString(),
-                "total": calculatedTotal.toString(),
-                "book-count": priceData.length.toString(),
-                "books-data": JSON.stringify(priceData)
-            })
+    const handleSave = async () => {
+        setIsSubmitting(true);
+
+        let calculatedTotal = 0;
+        const priceData = [];
+
+        // Calculate total and gather book data
+        books.forEach(book => {
+            const price = parseFloat(book.price) || 0;
+            calculatedTotal += price;
+            if (price > 0) {
+                priceData.push({
+                    title: book.title,
+                    author: book.author,
+                    price: price.toFixed(2)
+                });
+            }
         });
 
-        if (response.ok) {
-            setTotal(calculatedTotal);
-            setShowTotal(true);
-            setIsSaved(true);
-            setIsSubmitting(false);
+        calculatedTotal = Math.round(calculatedTotal * 100) / 100;
 
-            // Show success message
-            alert('Prices saved successfully! You can view submissions in your Netlify dashboard.');
-        } else {
-            throw new Error('Submission failed');
+        // Prepare submission data
+        const submissionData = {
+            "form-name": "book-prices",
+            "submission-date": new Date().toLocaleString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            }),
+            "total": calculatedTotal.toFixed(2),
+            "total-formatted": formatCurrency(calculatedTotal),
+            "book-count": priceData.length.toString(),
+            "books-data": JSON.stringify(priceData, null, 2)
+        };
+
+        console.log('Submitting data:', submissionData); // Debug log
+
+        try {
+            const response = await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: encode(submissionData)
+            });
+
+            if (response.ok) {
+                setTotal(calculatedTotal);
+                setShowTotal(true);
+                setIsSaved(true);
+                setIsSubmitting(false);
+
+                // Show success message with total
+                alert(`✅ Prices saved successfully!\n\nTotal: ${formatCurrency(calculatedTotal)}\nBooks with prices: ${priceData.length}\n\nYou can view all submissions in your Netlify dashboard under Forms.`);
+            } else {
+                throw new Error(`Submission failed with status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setIsSubmitting(false);
+            alert('❌ Failed to save prices. Please try again.\n\nIf this persists, check if the form is registered in Netlify.');
         }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        setIsSubmitting(false);
-        alert('Failed to save prices. Please try again.');
-    }
-};
+    };
 
     return (
         <div className="book-price-tracker">
@@ -147,15 +157,6 @@ const BookPriceTracker = () => {
                     </div>
                 )}
             </div>
-
-            {/* Hidden form for Netlify Forms detection */}
-            <form name="book-prices" data-netlify="true" hidden>
-                <input type="hidden" name="form-name" value="book-prices" />
-                <input type="hidden" name="submission-date" />
-                <input type="hidden" name="total" />
-                <input type="hidden" name="book-count" />
-                <textarea name="books-data"></textarea>
-            </form>
         </div>
     );
 };
